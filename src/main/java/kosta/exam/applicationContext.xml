@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.3.xsd">
+
+
+	<!-- 객체 생성 -->
+	<bean class = "kosta.exam.MessageServiceImpl" id="target"/>
+	<bean class="kosta.exam.TimerAdvice" id = "advice"/>
+	<bean class="kosta.exam.UserService" id="target2"/>
+	<!-- xml 기반의 aop 설정하기 
+		1 ) proxy-target-class="true"는 proxt Server를 생성할 때 J2SE기반으로 
+		할것인지 CGLIB방식으로 할 것인지를 설정하는 것으로 기본은 false로 J2SE기반이다.
+		J2SE는 자바의 oop개념을 적용한 것으로 interface를 구현했다면 반드시
+		interface를 통해서 타겟대상을 호출하도록 해야한다.
+		true는 CGLIB방식이다. 
+		
+		2 ) expose-proxy="true"는 AopContext를 사용할 수 있도록 설정
+	
+	-->
+	<aop:config proxy-target-class="false" expose-proxy="true">
+		<aop:aspect id="aspect" ref="advice">
+		  <aop:around method="around" pointcut="execution(* kosta.exam.*Service*.*Hello(..))"/>
+		</aop:aspect>
+	</aop:config>
+
+
+</beans>
